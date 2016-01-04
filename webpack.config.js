@@ -6,7 +6,6 @@ var NyanProgressPlugin = require("nyan-progress-webpack-plugin");
 var env = process.env.ENVIRONMENT || "DEV";
 
 var config = {
-  context: path.join(__dirname, "src"),
   entry: {
     baxi: ["./main.js"]
   },
@@ -17,6 +16,14 @@ var config = {
   devtool: "source-map",
   module: {
     loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015']
+        }
+      },
       // required to write "require('./style.css')"
       {
         test: /\.css$/,

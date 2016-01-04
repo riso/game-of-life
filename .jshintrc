@@ -1,0 +1,15 @@
+{
+  "esnext"    : true,
+  "globals"   : {
+    "require"     : false,
+    "jasmine"     : false,
+    "describe"    : false,
+    "it"          : false,
+    "spyOn"          : false,
+    "expect"      : false,
+    "before"      : false,
+    "beforeEach"  : false,
+    "after"       : false,
+    "afterEach"   : false
+  }
+}
