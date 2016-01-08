@@ -4,8 +4,11 @@ import {
 from "./lib/engine";
 import * as _ from "lodash";
 
-let game = new Engine(50);
+let game = new Engine(10);
 game.set(5, 5);
+game.set(5, 6);
+game.set(5, 7);
+game.set(7, 2);
 
 var width = 960,
 	height = 960;
@@ -14,20 +17,37 @@ var svg = d3.select("body").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
-svg.selectAll("rect")
-	.data(_.flatten(_.map(game.world, (col, idx) => {
-		return _.map(col, (cell, index) => {
-				return {
-					cell: cell,
-					x: index,
-          y: idx
-				};
-			});
-	}))).enter().append("rect")
-  .attr("height", 50)
-  .attr("width", 50)
-	.attr("class", (d) => d.cell ? "alive" : "dead")
-	.attr("x", (d) => d.x * 50)
-  .attr("y", (d) => d.y * 50);
+function plot() {
+  const rects = svg.selectAll("rect")
+  	.data(_.flatten(_.map(game.world, (col, idx) => {
+  		return _.map(col, (cell, index) => {
+  				return {
+  					cell: cell,
+  					y: index,
+            x: idx
+  				};
+  			});
+  	})));
+
+    rects.exit().remove();
+
+    rects.enter().append("rect")
+    .attr("height", 50)
+    .attr("width", 50)
+  	.attr("x", (d) => d.x * 50)
+    .attr("y", (d) => d.y * 50);
+
+    rects
+  	.attr("class", (d) => d.cell ? "alive" : "dead");
+}
+
+plot();
+
+window.setInterval(() => {
+  game.nextGen();
+
+  plot();
+
+}, 2000);
 
 d3.select(self.frameElement).style("height", height + "px");
