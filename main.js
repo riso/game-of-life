@@ -4,11 +4,7 @@ import {
 from "./lib/engine";
 import * as _ from "lodash";
 
-let game = new Engine(10);
-game.set(5, 5);
-game.set(5, 6);
-game.set(5, 7);
-game.set(7, 2);
+let game = new Engine(10, [[5,5], [5,6], [5,7], [7,2]]);
 
 var width = 960,
 	height = 960;
