@@ -1,0 +1,28 @@
+body {
+  background: #fcfcfa;
+}
+.stroke {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+.dead {
+  fill: red;
+}
+.alive {
+  fill: #222;
+}
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+.fill {
+  fill: #fff;
+}
