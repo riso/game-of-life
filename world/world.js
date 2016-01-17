@@ -49,34 +49,101 @@ function plotGrid() {
 
 function plotSphere() {
 
-	var projection = d3.geo.orthographic()
-		.scale(475)
-		.translate([width / 2, height / 2])
-		.clipAngle(90)
-		.precision(0.1);
+	var projection = d3.geo.equirectangular();
 
 	var path = d3.geo.path()
 		.projection(projection);
 
-	var graticule = d3.geo.graticule();
-	svg.append("defs").append("path")
-		.datum({
-			type: "Sphere"
-		})
-		.attr("id", "sphere")
-		.attr("d", path);
+	const scale = 100;
 
-	svg.append("use")
-		.attr("class", "stroke")
-		.attr("xlink:href", "#sphere");
+	function x2lat(a) {
+		return a / scale;
+	}
 
-	svg.append("use")
-		.attr("class", "fill")
-		.attr("xlink:href", "#sphere");
+	function y2lat(a) {
+		return (2 * Math.atan(Math.exp(a * scale)) - Math.PI / 2);
+	}
+
+	const geojson = {
+		type: "FeatureCollection",
+		features: _.flatten(_.map(game.world, (col, idx) => {
+			return _.map(col, (cell, index) => {
+				return {
+					type: "Feature",
+					properties: {
+						cell: cell
+					},
+					geometry: {
+						type: "Polygon",
+						coordinates: [
+							[x2lat(idx * scale), y2lat(index * scale)],
+							[x2lat((idx + 1) * scale), y2lat(index * scale)],
+							[x2lat((idx + 1) * scale), y2lat((index + 1) * scale)],
+							[x2lat(idx* scale), y2lat((index + 1) * scale)],
+							[x2lat(idx* scale), y2lat(index * scale)]
+						]
+					}
+				};
+			});
+		}))
+	};
 
 	svg.append("path")
-		.datum(graticule)
-		.attr("class", "graticule")
+		.datum({
+			"type": "FeatureCollection",
+			"features": [{
+				"type": "Feature",
+				"properties": {},
+				"geometry": {
+					"type": "Polygon",
+					"coordinates": [
+						[
+							[-10, -10],
+							[-10,
+								10
+							],
+							[
+								10,
+								10
+							],
+							[
+								10, -10
+							],
+							[-10, -10]
+						]
+					]
+				}
+			}, {
+				"type": "Feature",
+				"properties": {},
+				"geometry": {
+					"type": "Polygon",
+					"coordinates": [
+						[
+							[
+								9.84375,
+								28.8831596093235
+							],
+							[
+								10.01953125,
+								10.01212955790814
+							],
+							[-10.01953125,
+								10.01212955790814
+							],
+							[-10.1513671875,
+								28.806173508854776
+							],
+							[
+								9.84375,
+								28.8831596093235
+							]
+						]
+					]
+				}
+			}]
+		})
+		.attr("id", "point")
 		.attr("d", path);
 }
 
