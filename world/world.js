@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as d3 from "d3";
 
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
 import {
@@ -11,17 +11,14 @@ from "../lib/engine";
 
 import "./world.css";
 
-
-ReactDOM.render(< h1 > Hello, world! < /h1>,
-  document.getElementById("example")
-);
-
-const game = new Engine(10, [
+const cells = [
   [5, 5],
   [5, 6],
   [5, 7],
   [7, 2],
-]);
+];
+
+let game = new Engine(10, cells);
 
 const width = 960;
 const height = 960;
@@ -30,6 +27,7 @@ const cellSize = 20;
 const svg = d3.select("body").append("svg")
   .attr("width", width)
   .attr("height", height);
+
 
 function plotGrid() {
   const rects = svg.selectAll("rect")
@@ -59,6 +57,37 @@ function plotGrid() {
   rects
     .attr("class", (d) => d.cell ? "alive" : "dead");
 }
+
+class ControlForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      size: 10,
+    };
+  }
+
+  handleGridChange(e) {
+    game = new Engine(+e.target.value, cells);
+    plotGrid();
+  }
+
+  render() {
+    return (
+      <form className="controlForm">
+        <input
+          type="number"
+          placeholder="Grid size"
+          value={this.state.size}
+          onChange={e => this.handleGridChange(e)}
+        />
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(<ControlForm/>, document.getElementById("app"));
+
 
 plotGrid();
 
