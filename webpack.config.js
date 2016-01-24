@@ -1,49 +1,48 @@
-var path = require("path");
-var webpack = require("webpack");
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var NyanProgressPlugin = require("nyan-progress-webpack-plugin");
+const path = require("path");
+const webpack = require("webpack");
+const NyanProgressPlugin = require("nyan-progress-webpack-plugin");
 
-var env = process.env.ENVIRONMENT || "DEV";
+const env = process.env.ENVIRONMENT || "DEV";
 
-var config = {
+const config = {
   entry: {
-    baxi: ["./main.js"]
+    gol: ["./main.js"],
   },
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "bundle.js"
+    filename: "bundle.js",
   },
   devtool: "source-map",
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: "babel",
         exclude: /node_modules/,
         query: {
-          presets: ['es2015']
-        }
+          presets: ["es2015", "react"],
+        },
       },
       // required to write "require('./style.css')"
       {
         test: /\.css$/,
-        loader: "style!css?sourceMap"
+        loader: "style!css?sourceMap",
       }, {
         test: /\.scss$/,
-        loader: "style!css?sourceMap!sass?sourceMap"
+        loader: "style!css?sourceMap!sass?sourceMap",
       },
       // required for images and bootstrap icons
       {
         test: /\.(ttf|eot|svg|png|gif|jpg|woff(2)?)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "url"
-      }
-    ]
+        loader: "url",
+      },
+    ],
   },
   plugins: [
     new webpack.DefinePlugin({
-      __DEV__: (env === "DEV")
-    })
-  ]
+      __DEV__: (env === "DEV"),
+    }),
+  ],
 };
 
 
