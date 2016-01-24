@@ -26,3 +26,7 @@ body {
 .fill {
   fill: #fff;
 }
+
+#point {
+  fill: red;
+}

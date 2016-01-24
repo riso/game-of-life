@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as d3 from "d3";
+import * as turf from "turf";
 
 import {
 	Engine
@@ -47,108 +48,7 @@ function plotGrid() {
 		.attr("class", (d) => d.cell ? "alive" : "dead");
 }
 
-function plotSphere() {
-
-	var projection = d3.geo.equirectangular();
-
-	var path = d3.geo.path()
-		.projection(projection);
-
-	const scale = 100;
-
-	function x2lat(a) {
-		return a / scale;
-	}
-
-	function y2lat(a) {
-		return (2 * Math.atan(Math.exp(a * scale)) - Math.PI / 2);
-	}
-
-	const geojson = {
-		type: "FeatureCollection",
-		features: _.flatten(_.map(game.world, (col, idx) => {
-			return _.map(col, (cell, index) => {
-				return {
-					type: "Feature",
-					properties: {
-						cell: cell
-					},
-					geometry: {
-						type: "Polygon",
-						coordinates: [
-							[x2lat(idx * scale), y2lat(index * scale)],
-							[x2lat((idx + 1) * scale), y2lat(index * scale)],
-							[x2lat((idx + 1) * scale), y2lat((index + 1) * scale)],
-							[x2lat(idx* scale), y2lat((index + 1) * scale)],
-							[x2lat(idx* scale), y2lat(index * scale)]
-						]
-					}
-				};
-			});
-		}))
-	};
-
-	svg.append("path")
-		.datum({
-			"type": "FeatureCollection",
-			"features": [{
-				"type": "Feature",
-				"properties": {},
-				"geometry": {
-					"type": "Polygon",
-					"coordinates": [
-						[
-							[-10, -10],
-							[-10,
-								10
-							],
-							[
-								10,
-								10
-							],
-							[
-								10, -10
-							],
-							[-10, -10]
-						]
-					]
-				}
-			}, {
-				"type": "Feature",
-				"properties": {},
-				"geometry": {
-					"type": "Polygon",
-					"coordinates": [
-						[
-							[
-								9.84375,
-								28.8831596093235
-							],
-							[
-								10.01953125,
-								10.01212955790814
-							],
-							[-10.01953125,
-								10.01212955790814
-							],
-							[-10.1513671875,
-								28.806173508854776
-							],
-							[
-								9.84375,
-								28.8831596093235
-							]
-						]
-					]
-				}
-			}]
-		})
-		.attr("id", "point")
-		.attr("d", path);
-}
-
 plotGrid();
-plotSphere();
 
 
 d3.select(self.frameElement).style("height", height + "px");
