@@ -79,7 +79,7 @@ class ControlForm extends Component {
           type="number"
           placeholder="Grid size"
           value={this.state.size}
-          onChange={e => this.handleGridChange(e)}
+          onChange={this.handleGridChange}
         />
       </form>
     );
