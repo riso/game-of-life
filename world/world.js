@@ -11,6 +11,8 @@ from "../lib/engine";
 
 import "./world.css";
 
+import ControlForm from "./controlForm";
+
 const cells = [
   [5, 5],
   [5, 6],
@@ -58,7 +60,7 @@ function plotGrid() {
     .attr("class", (d) => d.cell ? "alive" : "dead");
 }
 
-class ControlForm extends Component {
+class App extends Component {
 
   constructor(props) {
     super(props);
@@ -67,29 +69,19 @@ class ControlForm extends Component {
     };
   }
 
-  handleGridChange(e) {
-    game = new Engine(+e.target.value, cells);
-    plotGrid();
-  }
-
   render() {
     return (
-      <form className="controlForm">
-        <input
-          type="number"
-          placeholder="Grid size"
-          value={this.state.size}
-          onChange={this.handleGridChange}
-        />
-      </form>
+      <ControlForm size={this.state.size} onSizeChange={s => {
+        console.log("size change",s);
+        this.setState({
+          size: s,
+        });
+      }} />
     );
   }
 }
 
-ReactDOM.render(<ControlForm/>, document.getElementById("app"));
-
-
-plotGrid();
+ReactDOM.render(<App/>, document.getElementById("app"));
 
 
 d3.select(self.frameElement).style("height", `${height} px`);
